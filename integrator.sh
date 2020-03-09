@@ -2,14 +2,14 @@
 
 # Variable declaration START
 
-DOMAIN="" # User-configurable
+DOMAIN="" 			# User-configurable
 DOMAIN_SHORT="" 
-DC="" # User-configurable
+DC="" 				# User-configurable
 DC_ADDR=""
-BASE_HOSTNAME="" # User-configurable
-BIND_USER="Administrator" # User-configurable
-BIND_PW='' # User-configurable
-AUTO_MODE=0 # User-configurable
+BASE_HOSTNAME="" 		# User-configurable
+BIND_USER="Administrator" 	# User-configurable
+BIND_PW='' 			# User-configurable
+AUTO_MODE=0 			# User-configurable
 LOGFILE=/var/log/ad_integrator.log
 FAIL_BUFFER=$(mktemp)
 conf_backups=()
