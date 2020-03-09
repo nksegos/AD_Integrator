@@ -1,4 +1,6 @@
 # AD Integrator
+Built and tested on vanilla debian installations, but the script should work on any derivative distro as well. The script
+
 ## integrator.sh
 ```
 $ ./integrator.sh -h

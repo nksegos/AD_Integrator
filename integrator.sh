@@ -2,14 +2,14 @@
 
 # Variable declaration START
 
-DOMAIN=""
+DOMAIN="" # User-configurable
 DOMAIN_SHORT="" 
-DC=""
+DC="" # User-configurable
 DC_ADDR=""
-BASE_HOSTNAME=""
-BIND_USER="Administrator"
-BIND_PW=''
-AUTO_MODE=0
+BASE_HOSTNAME="" # User-configurable
+BIND_USER="Administrator" # User-configurable
+BIND_PW='' # User-configurable
+AUTO_MODE=0 # User-configurable
 LOGFILE=/var/log/ad_integrator.log
 FAIL_BUFFER=$(mktemp)
 conf_backups=()
@@ -28,9 +28,27 @@ Usage(){
 	echo " 		-b BASE HOSTNAME: Provide the base hostname prefix for the joined machine."
 	echo " 		-u DOMAIN BIND USER: Provide the user to join the domain with.(Default: Administrator)"
 	echo " 		-p DOMAIN BIND PASSWORD: Provide the password file for the user to join the domain."
+	echo " 		-f CONFIG_FILE: Load integration pararameters from a config file."
+	echo " 		-g: Generate default config file."
 	echo " 		-a: Set execution mode to automatic. User won't be queried for host reboot or to setting restoration in case of failure."
 	echo " 		-h: Display help menu."
 	echo ""
+}
+
+## Parse config file
+get_file_conf(){
+cat $1 | awk -v param="$2" -F= '{ if ( $1 == param ) { printf ("%s", $2); } }'
+}
+
+## Generate blank config file
+gen_config(){
+cat << EOF > ./ad_integration_config
+DOMAIN=
+DOMAIN_CONTROLLER=
+BASE_HOSTNAME=
+BIND_USER=
+BIND_PASSWORD=
+EOF
 }
 
 ## Logging function
@@ -41,16 +59,20 @@ log_msg(){
 ## User prompt utility function
 user_prompt(){
 	local USER_REPLY=""
-	read -r -p "$2 " USER_REPLY 
+	read -r -p "$1 " USER_REPLY 
  	case $USER_REPLY in
         	[yY][eE][sS]|[yY])
-			$1
+			$2
                  	;;
                  [nN][oO]|[nN])
-                 	true
+                 	$3
                  	;;
          	"")
-              		$3 
+              		if [ "$4" -eq 0 ]; then
+				$2
+			else 
+				$3
+			fi
                  	;;
         	*)
                  	true
@@ -119,7 +141,7 @@ exit_check(){
 
 # Input collection and sanitization START
 
-while getopts ":d:c:b:u:p:ha" opt ; do
+while getopts ":d:c:b:u:p:f:gha" opt ; do
 	case $opt in
 		d)
 			DOMAIN=$OPTARG
@@ -139,6 +161,23 @@ while getopts ":d:c:b:u:p:ha" opt ; do
 			else
 				echo "The file $OPTARG doesn't exit."
 			fi
+			;;
+		f)
+			log_msg "\nLoading configuration from file..."
+			DOMAIN=$(get_file_conf $OPTARG "DOMAIN")
+			DC=$(get_file_conf $OPTARG "DOMAIN_CONTROLLER")
+			BASE_HOSTNAME=$(get_file_conf $OPTARG "BASE_HOSTNAME")
+			BIND_USER=$(get_file_conf $OPTARG "BIND_USER")
+			if [ -z "$BIND_USER" ]; then
+				BIND_USER="Administrator"
+			fi
+			BIND_PW=$(get_file_conf $OPTARG "BIND_PASSWORD" )
+			log_msg "Done!\n"
+			;;
+		g)
+			gen_config
+			echo "Configuration file found at: $(pwd)/ad_integration_config."
+			exit 0
 			;;
 		a)
 			AUTO_MODE=1
@@ -166,7 +205,6 @@ if [[ "$EUID" != "0" ]]; then
     printf "\nThis script must be run as root.\n" 
     exit 1
 fi
-
 
 if [ -z "$DOMAIN" ]; then
 	read -p "Enter Domain: " DOMAIN
@@ -205,6 +243,17 @@ fi
 
 
 # AD Integration START
+
+log_msg "\n\nIntegration Config:\n"
+log_msg "Domain name: $DOMAIN \n"
+log_msg "DC hostname: $DC \n"
+log_msg "Hostname prefix: $BASE_HOSTNAME \n"
+log_msg "Domain bind user: $BIND_USER \n\n"
+
+if [ "$AUTO_MODE" -eq 0 ]; then
+	user_prompt "Continue? [Y/n]" true exit 0
+fi
+
 
 log_msg "\nStarting AD integration for domain: ${DOMAIN^^}.\n"
 
@@ -384,9 +433,9 @@ log_msg "\nAD integration for domain ${DOMAIN^^} has been completed.\n\n"
 
 # Cleanup
 if [ "$AUTO_MODE" -eq 0 ]; then
-	user_prompt remove_backups "Remove backup configuration files? [y/N]" true
+	user_prompt "Remove backup configuration files? [y/N]" remove_backups true 1
 	printf "\n"
-	user_prompt /usr/sbin/reboot "Reboot system now? [Y/n]" /usr/sbin/reboot
+	user_prompt "Reboot system now? [Y/n]" /usr/sbin/reboot true 0
 else
 	log_msg "Rebooting.\n"
 	/usr/sbin/reboot
