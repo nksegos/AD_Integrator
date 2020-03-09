@@ -29,7 +29,7 @@ Usage(){
 	echo " 		-u DOMAIN BIND USER: Provide the user to join the domain with.(Default: Administrator)"
 	echo " 		-p DOMAIN BIND PASSWORD: Provide the password file for the user to join the domain."
 	echo " 		-f CONFIG_FILE: Load integration pararameters from a config file."
-	echo " 		-g: Generate default config file."
+	echo " 		-g: Generate a blank config file."
 	echo " 		-a: Set execution mode to automatic. User won't be queried for host reboot or to setting restoration in case of failure."
 	echo " 		-h: Display help menu."
 	echo ""
