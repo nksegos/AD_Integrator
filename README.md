@@ -15,8 +15,8 @@ The script can be executed in the following ways:
 * ~~**Set the necessary variables within the script**~~: Even though all the necessary variables can be set in the first 10 lines...**No. Just don't. That's ghetto.**
 
 ## Prerequisites
-* The AD domain you are joining is the search domain in /etc/resolv.conf.
-* Your DNS server resolves to the Domain Controller.
+* The **AD domain** you are joining **is the search domain** in /etc/resolv.conf.
+* Your **DNS** server resolves to the Domain Controller.
 * You have internet access. Even though if all the packages are pre-installed to the system, I suppose it wouldn't be necessary.
 ## integrator.sh
 ```
