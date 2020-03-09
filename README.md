@@ -43,3 +43,11 @@ $ ./integrator.sh -d DOMAIN.EXAMPLE.LOCAL -c AD -b workstation -u Administrator 
 $ ./integrator.sh -f /path/to/config/file -a
 ```
 
+By removing the '-a' flag, you get to confirm the validity of your input, choose whether the backup configuration files are deleted and whether the system will be rebooted immediately.
+
+## Notes
+* Any parameters not included in the config file or as arguments to the script will have to be provided interactively by the user with the exception of the domain user for the joining, which by default is set to 'Administrator' and a manual override is needed to change it.
+
+* On **AUTO_MODE** set to 1, the backup configuration files are kept and the system is rebooted at the end of the script. 
+
+* The script by default sets each domain user's homedir to '/tmp/%u'. If you wish to change that you'll have to modify the code manually.
