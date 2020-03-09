@@ -12,7 +12,7 @@ The script can be executed in the following ways:
 * **Interactively**: No flags are used and the user provides input when and where needed. Mainly useful for debugging.
 * **Load parameters from a config file**: The integration parameters are loaded from a user specified file written in the "NAME=VALUE" format, with the option to make no user prompts and execute automatically.
 * **Load parameters as flag options**: The user provides the parameters as arguments to the scripts prior to the execution. **NOTE**: The password must be provided in a file if that execution mode is chosen.
-* **Set the necessary variables within the script**: Even though all the necessary variables can be set in the first 10 lines...No. Just don't.
+* ~~**Set the necessary variables within the script**~~: Even though all the necessary variables can be set in the first 10 lines...**No. Just don't**.
 
 ## integrator.sh
 ```
