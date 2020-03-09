@@ -30,6 +30,7 @@ Usage(){
 	echo " 		-p DOMAIN BIND PASSWORD: Provide the password file for the user to join the domain."
 	echo " 		-a: Set execution mode to automatic. User won't be queried for host reboot or to setting restoration in case of failure."
 	echo " 		-h: Display help menu."
+	echo ""
 }
 
 ## Logging function
@@ -115,11 +116,6 @@ exit_check(){
 
 # Function definition END
 
-# Privilege check
-if [[ "$EUID" != "0" ]]; then
-    printf "\nThis script must be run as root.\n" 
-    exit 1
-fi
 
 # Input collection and sanitization START
 
@@ -163,6 +159,14 @@ while getopts ":d:c:b:u:p:ha" opt ; do
 			;;
 	esac
 done
+
+
+## Privilege check
+if [[ "$EUID" != "0" ]]; then
+    printf "\nThis script must be run as root.\n" 
+    exit 1
+fi
+
 
 if [ -z "$DOMAIN" ]; then
 	read -p "Enter Domain: " DOMAIN
