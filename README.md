@@ -32,3 +32,14 @@ Usage:
  		-a: Set execution mode to automatic. User won't be queried for host reboot or to setting restoration in case of failure.
  		-h: Display help menu.
 ```
+
+## Execution templates
+Fully automated with no user input:
+```
+$ ./integrator.sh -d DOMAIN.EXAMPLE.LOCAL -c AD -b workstation -u Administrator -p /path/to/password/file -a
+```
+**OR**
+```
+$ ./integrator.sh -f /path/to/config/file -a
+```
+
