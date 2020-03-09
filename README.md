@@ -1,5 +1,5 @@
 # AD Integrator
-##integrator.sh
+## integrator.sh
 ```
 $ ./integrator.sh -h
 Usage:
