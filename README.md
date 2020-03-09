@@ -1,5 +1,5 @@
 # AD Integrator
-
+##integrator.sh
 ```
 $ ./integrator.sh -h
 Usage:
@@ -10,5 +10,4 @@ Usage:
  		-p DOMAIN BIND PASSWORD: Provide the password file for the user to join the domain.
  		-a: Set execution mode to automatic. User won't be queried for host reboot or to setting restoration in case of failure.
  		-h: Display help menu.
-
 ```
