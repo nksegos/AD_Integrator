@@ -3,6 +3,7 @@ Built and tested on vanilla debian installations, but the script should work on 
 
 The hostname naming scheme is as follows: 
 **${USER_DEFINED_PREFIX}-${LAST_PART_OF_THE_HOST_IP_ADDRESS}.**
+
 **e.g.** A host with an adress 10.1.1.25 and defined prefix 'lpc' would be configured as : **lpc-25**
 ## integrator.sh
 ```
